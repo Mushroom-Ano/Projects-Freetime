@@ -1,120 +1,120 @@
 # Projects-Freetime
-A showcase of projects i have created in my free time.
+A showcase of projects i have created in my free time. This certain proect ws created ijn C# using visual studio therefore i cannot present the whole code as this would involve the visual studio application. Hoiwever, you can download the .rar package called labeled 'Autoclicker' to see the whole project. 
 
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
-using System.Windows.Forms;
+    using System;
+    using System.Collections.Generic;
+    using System.ComponentModel;
+    using System.Data;
+    using System.Drawing;
+    using System.Linq;
+    using System.Runtime.InteropServices;
+    using System.Text;
+    using System.Threading;
+    using System.Threading.Tasks;
+    using System.Windows.Forms;
 
-namespace AutoClicker
-{
-    public partial class Form1 : Form
+    namespace AutoClicker
     {
-        [DllImport("user32.dll")]
-        static extern short GetAsyncKeyState(Keys vKey);
-
-        [DllImport("user32.dll", CharSet = CharSet.Auto, CallingConvention = CallingConvention.StdCall)]
-        public static extern void mouse_event(int dwFlags, int dx, int dy, int cButtons, int dwExtraInfo);
-
-        private const int LEFTUP = 0x0004;
-        private const int LEFTDOWN = 0x0002;
-        public int interval = 5;
-        public bool Click = false;
-        public int parsedValue;
- 
-
-
-        public Form1()
+        public partial class Form1 : Form
         {
-            InitializeComponent();
-        }
+            [DllImport("user32.dll")]
+            static extern short GetAsyncKeyState(Keys vKey);
 
-        private void textBox1_TextChanged(object sender, EventArgs e)
-        {
+            [DllImport("user32.dll", CharSet = CharSet.Auto, CallingConvention = CallingConvention.StdCall)]
+            public static extern void mouse_event(int dwFlags, int dx, int dy, int cButtons, int dwExtraInfo);
 
-        }
+            private const int LEFTUP = 0x0004;
+            private const int LEFTDOWN = 0x0002;
+            public int interval = 5;
+            public bool Click = false;
+            public int parsedValue;
 
-        private void checkBox1_CheckedChanged(object sender, EventArgs e)
-        {
 
-        }
 
-        private void Form1_Load(object sender, EventArgs e)
-        {
-            CheckForIllegalCrossThreadCalls = false;
-            Thread AC = new Thread(AutoClick);
-            backgroundWorker1.RunWorkerAsync();
-
-            AC.Start();
-        }
-        private void AutoClick()
-        {
-            while (true)
+            public Form1()
             {
-                if (Click == true)
-                {
-                    mouse_event(dwFlags: LEFTUP, dx: 0, dy: 0, cButtons: 0, dwExtraInfo: 0);
-                    Thread.Sleep(1);
-                    mouse_event(dwFlags: LEFTDOWN, dx: 0, dy: 0, cButtons: 0, dwExtraInfo: 0);
-                    Thread.Sleep(interval);
-                }
-                Thread.Sleep(2);
+                InitializeComponent();
             }
-        }
 
-        private void backgroundWorker1_DoWork(object sender, DoWorkEventArgs e)
-        {
-            while (true)
+            private void textBox1_TextChanged(object sender, EventArgs e)
             {
-                if (checkBox1.Checked)
+
+            }
+
+            private void checkBox1_CheckedChanged(object sender, EventArgs e)
+            {
+
+            }
+
+            private void Form1_Load(object sender, EventArgs e)
+            {
+                CheckForIllegalCrossThreadCalls = false;
+                Thread AC = new Thread(AutoClick);
+                backgroundWorker1.RunWorkerAsync();
+
+                AC.Start();
+            }
+            private void AutoClick()
+            {
+                while (true)
                 {
-                    if (GetAsyncKeyState(Keys.Down)< 0)
+                    if (Click == true)
                     {
-                        Click = false;
-                    } else if (GetAsyncKeyState(Keys.Up)< 0)
+                        mouse_event(dwFlags: LEFTUP, dx: 0, dy: 0, cButtons: 0, dwExtraInfo: 0);
+                        Thread.Sleep(1);
+                        mouse_event(dwFlags: LEFTDOWN, dx: 0, dy: 0, cButtons: 0, dwExtraInfo: 0);
+                        Thread.Sleep(interval);
+                    }
+                    Thread.Sleep(2);
+                }
+            }
+
+            private void backgroundWorker1_DoWork(object sender, DoWorkEventArgs e)
+            {
+                while (true)
+                {
+                    if (checkBox1.Checked)
                     {
-                        Click = true;
+                        if (GetAsyncKeyState(Keys.Down)< 0)
+                        {
+                            Click = false;
+                        } else if (GetAsyncKeyState(Keys.Up)< 0)
+                        {
+                            Click = true;
+                        }
+                        Thread.Sleep(1);
                     }
                     Thread.Sleep(1);
                 }
                 Thread.Sleep(1);
             }
-            Thread.Sleep(1);
-        }
 
-        private void button1_Click(object sender, EventArgs e)
-        {
-            if (!int.TryParse(textBox1.Text, out parsedValue))
+            private void button1_Click(object sender, EventArgs e)
             {
-                MessageBox.Show("Please enter a value");
-                return;
+                if (!int.TryParse(textBox1.Text, out parsedValue))
+                {
+                    MessageBox.Show("Please enter a value");
+                    return;
 
-            } else
+                } else
+                {
+                    interval = int.Parse(textBox1.Text);
+                }
+            }
+
+            private void fontDialog1_Apply(object sender, EventArgs e)
             {
-                interval = int.Parse(textBox1.Text);
+
+            }
+
+            private void pictureBox2_Click(object sender, EventArgs e)
+            {
+
+            }
+
+            private void richTextBox1_TextChanged(object sender, EventArgs e)
+            {
+
             }
         }
-
-        private void fontDialog1_Apply(object sender, EventArgs e)
-        {
-
-        }
-
-        private void pictureBox2_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void richTextBox1_TextChanged(object sender, EventArgs e)
-        {
-
-        }
     }
-}
