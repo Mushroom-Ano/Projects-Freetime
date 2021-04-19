@@ -1,55 +1,57 @@
 # Projects-Freetime
 # A showcase of projects i have created in my free time.
 
-import discord
-from discord import Embed, message
-from discord.ext import commands
-from discord.ext.commands.cooldowns import BucketType
-import json
-import os
-import random
-import discord, datetime, time
-from datetime import date, datetime
+    import discord
+    from discord import Embed, message
+    from discord.ext import commands
+    from discord.ext.commands.cooldowns import BucketType
+    import json
+    import os
+    import random
+    import discord, datetime, time
+    from datetime import date, datetime
 
-os.chdir("C:\\Users\\anola\\Desktop\\Mushbot")
+    os.chdir("C:\\Users\\anola\\Desktop\\Mushbot")
 
-client = commands.Bot(command_prefix="?")
-
-
-@client.event
-async def on_ready():
-    print("Ready!")
+    client = commands.Bot(command_prefix="?")
 
 
-type=<BucketType.default: 0>
-rate = 1
-per = 10
+    @client.event
+    async def on_ready():
+        print("Ready!")
+
+
+    type=<BucketType.default: 0>
+    rate = 1
+    per = 10
 
 # ?balance command for the balance interface
-@client.command(aliases=['inventory', 'bal', "balance", "money", "cash"])
-async def inv(ctx):
-    await open_safehouse(ctx.author)
-    user = ctx.author
-    users = await get_safehouse_data()
+    
+    @client.command(aliases=['inventory', 'bal', "balance", "money", "cash"])
+    async def inv(ctx):
+        await open_safehouse(ctx.author)
+        user = ctx.author
+        users = await get_safehouse_data()
 
-    backpack_amt = users[str(user.id)]["backpack"]
-    safehouse_amt = users[str(user.id)]["safehouse"]
+        backpack_amt = users[str(user.id)]["backpack"]
+        safehouse_amt = users[str(user.id)]["safehouse"]
 
-    em = discord.Embed(title=f"{ctx.author.name}'s **Inventory**", color=discord.Color.red())
-    em.add_field(name=":moneybag:Backpack:moneybag:", value=f"{backpack_amt} :mushroom:")
-    em.add_field(name=":wood:Safehouse:wood:", value=safehouse_amt)
-    await ctx.send(embed=em)
+        em = discord.Embed(title=f"{ctx.author.name}'s **Inventory**", color=discord.Color.red())
+        em.add_field(name=":moneybag:Backpack:moneybag:", value=f"{backpack_amt} :mushroom:")
+        em.add_field(name=":wood:Safehouse:wood:", value=safehouse_amt)
+        await ctx.send(embed=em)
 
 #conversion system for converting mushrooms into currency.
-@client.command(aliases=["conv"])
-async def convert(ctx, deposit="all"):
-    await open_safehouse(ctx.author)
-    users = await get_safehouse_data()
-    user = ctx.author
-    if deposit == "all":
-        deposit = users[str(user.id)]["backpack"]
-    else:
-        deposit = int(deposit)
+    
+    @client.command(aliases=["conv"])
+    async def convert(ctx, deposit="all"):
+        await open_safehouse(ctx.author)
+        users = await get_safehouse_data()
+        user = ctx.author
+        if deposit == "all":
+            deposit = users[str(user.id)]["backpack"]
+        else:
+            deposit = int(deposit)
 
     await ctx.send(f"Are you sure you want to convert {deposit} :mushroom: from your backpack into {deposit} :coin:?")
 
@@ -73,19 +75,20 @@ async def convert(ctx, deposit="all"):
 
 
 # search areas for mushrooms.
-@client.command(aliases=['loot'])
-@commands.cooldown(1, 20, BucketType.user)
-async def search(ctx):
-    await open_weapons(ctx.author)
-    await open_safehouse(ctx.author)
-    await open_mushroom(ctx.author)
-    users_weapons = await get_weapons_data()
-    users = await get_safehouse_data()
-    users_mushroom = await get_mushroom_data()
-    user = ctx.author
-    g = users_weapons[str(user.id)]["Gloves"]
-    mg = users_weapons[str(user.id)]["Majestic Gloves"]
-    ng = users_weapons[str(user.id)]["Nifty Grabber"]
+    
+    @client.command(aliases=['loot'])
+    @commands.cooldown(1, 20, BucketType.user)
+    async def search(ctx):
+        await open_weapons(ctx.author)
+        await open_safehouse(ctx.author)
+        await open_mushroom(ctx.author)
+        users_weapons = await get_weapons_data()
+        users = await get_safehouse_data()
+        users_mushroom = await get_mushroom_data()
+        user = ctx.author
+        g = users_weapons[str(user.id)]["Gloves"]
+        mg = users_weapons[str(user.id)]["Majestic Gloves"]
+        ng = users_weapons[str(user.id)]["Nifty Grabber"]
 
 
 
@@ -242,23 +245,25 @@ async def search(ctx):
 
 
 # Cooldown command
-@search.error
-async def search_error(ctx, error):
-    if isinstance(error, commands.CommandOnCooldown):
-        msg = 'Slow down there, please try again in **{:.2f}s**'.format(error.retry_after)
-        await ctx.send(msg)
-    else:
-        raise error
+
+    @search.error
+    async def search_error(ctx, error):
+        if isinstance(error, commands.CommandOnCooldown):
+            msg = 'Slow down there, please try again in **{:.2f}s**'.format(error.retry_after)
+            await ctx.send(msg)
+        else:
+            raise error
 
 
 # shop (?shop) make sure to add more items
-@client.command()
-async def shop(ctx):
-    await open_weapons(ctx.author)
-    user = ctx.author
-    users_weapons = await get_weapons_data()
-    await open_safehouse(ctx.author)
-    users = await get_safehouse_data()
+
+    @client.command()
+    async def shop(ctx):
+        await open_weapons(ctx.author)
+        user = ctx.author
+        users_weapons = await get_weapons_data()
+        await open_safehouse(ctx.author)
+        users = await get_safehouse_data()
 
     gloves_majestic_amt = users_weapons[str(user.id)]["Majestic Gloves"]
     gloves_amt = users_weapons[str(user.id)]["Gloves"]
@@ -391,98 +396,100 @@ async def shop(ctx):
         await ctx.send("That is not an option or you have already bought this item (did you type in uppercase?)")
 
 
-@client.command()
-async def farm(ctx):
-    await open_weapons(ctx.author)
-    user = ctx.author
-    users_weapons = await get_weapons_data()
-    await open_safehouse(ctx.author)
-    users = await get_safehouse_data()
-    await ctx.send("Still Developing")
+    @client.command()
+    async def farm(ctx):
+        await open_weapons(ctx.author)
+        user = ctx.author
+        users_weapons = await get_weapons_data()
+        await open_safehouse(ctx.author)
+        users = await get_safehouse_data()
+        await ctx.send("Still Developing")
 
 
 # open accounts (or storage for mushrooms and money)
-async def open_safehouse(user):
-    users = await get_safehouse_data()
 
-    if str(user.id) in users:
-        return False
-    else:
-        users[str(user.id)] = {}
-        users[str(user.id)]["backpack"] = 0
-        users[str(user.id)]["safehouse"] = 0
+    async def open_safehouse(user):
+        users = await get_safehouse_data()
 
-    with open("items.json", "w") as f:
-        json.dump(users, f)
-    return True
+        if str(user.id) in users:
+            return False
+        else:
+            users[str(user.id)] = {}
+            users[str(user.id)]["backpack"] = 0
+            users[str(user.id)]["safehouse"] = 0
 
-
-async def get_safehouse_data():
-    with open("items.json", "r") as f:
-        users = json.load(f)
-
-    return users
+        with open("items.json", "w") as f:
+            json.dump(users, f)
+        return True
 
 
-# weapons
-async def open_weapons(user):
-    users_weapons = await get_weapons_data()
+    async def get_safehouse_data():
+        with open("items.json", "r") as f:
+            users = json.load(f)
 
-    if str(user.id) in users_weapons:
-        return False
-    else:
-        users_weapons[str(user.id)] = {}
-        users_weapons[str(user.id)]["Majestic Gloves"] = 0
-        users_weapons[str(user.id)]["Gloves"] = 0
-        users_weapons[str(user.id)]["Nifty Grabber"] = 0
-        users_weapons[str(user.id)]["Shovel"] = 0
-        users_weapons[str(user.id)]["Magic Book"] = 0
-        users_weapons[str(user.id)]["Boots"] = 0
-
-    with open("weapons.json", "w") as f:
-        json.dump(users_weapons, f)
-    return True
+        return users
 
 
-async def get_weapons_data():
-    with open("weapons.json", "r") as f:
-        users_weapons = json.load(f)
+# Tools for mushroom gathering. 
 
-    return users_weapons
+    async def open_weapons(user):
+        users_weapons = await get_weapons_data()
 
+        if str(user.id) in users_weapons:
+            return False
+        else:
+            users_weapons[str(user.id)] = {}
+            users_weapons[str(user.id)]["Majestic Gloves"] = 0
+            users_weapons[str(user.id)]["Gloves"] = 0
+            users_weapons[str(user.id)]["Nifty Grabber"] = 0
+            users_weapons[str(user.id)]["Shovel"] = 0
+            users_weapons[str(user.id)]["Magic Book"] = 0
+            users_weapons[str(user.id)]["Boots"] = 0
 
-async def open_mushroom(user):
-    users_mushroom = await get_mushroom_data()
-
-    if str(user.id) in users_mushroom:
-        return False
-    else:
-        users_mushroom[str(user.id)] = {}
-        users_mushroom[str(user.id)]["Common Mushroom"] = 0
-        users_mushroom[str(user.id)]["Uncommon Mushroom"] = 0
-        users_mushroom[str(user.id)]["Rare Mushroom"] = 0
-        users_mushroom[str(user.id)]["Epic Mushroom"] = 0
-        users_mushroom[str(user.id)]["Legendary Mushroom"] = 0
-        users_mushroom[str(user.id)]["God Mushroom"] = 0
-
-        common_m = users_mushroom[str(user.id)]["Common Mushroom"]
-        uncommon_m = users_mushroom[str(user.id)]["Uncommon Mushroom"]
-        rare_m = users_mushroom[str(user.id)]["Rare Mushroom"]
-        epic_m = users_mushroom[str(user.id)]["Epic Mushroom"]
-        legendary_m = users_mushroom[str(user.id)]["Legendary Mushroom"]
-        god_m = users_mushroom[str(user.id)]["God Mushroom"]
-        mushroom_chance = [common_m, uncommon_m, rare_m, epic_m, legendary_m, god_m]
-
-    with open("mushroom.json", "w") as f:
-        json.dump(users_mushroom, f)
-    return True
+        with open("weapons.json", "w") as f:
+            json.dump(users_weapons, f)
+        return True
 
 
-async def get_mushroom_data():
-    with open("mushroom.json", "r") as f:
-        users_mushroom = json.load(f)
+    async def get_weapons_data():
+        with open("weapons.json", "r") as f:
+            users_weapons = json.load(f)
 
-    return users_mushroom
+        return users_weapons
+
+
+    async def open_mushroom(user):
+        users_mushroom = await get_mushroom_data()
+
+        if str(user.id) in users_mushroom:
+            return False
+        else:
+            users_mushroom[str(user.id)] = {}
+            users_mushroom[str(user.id)]["Common Mushroom"] = 0
+            users_mushroom[str(user.id)]["Uncommon Mushroom"] = 0
+            users_mushroom[str(user.id)]["Rare Mushroom"] = 0
+            users_mushroom[str(user.id)]["Epic Mushroom"] = 0
+            users_mushroom[str(user.id)]["Legendary Mushroom"] = 0
+            users_mushroom[str(user.id)]["God Mushroom"] = 0
+
+            common_m = users_mushroom[str(user.id)]["Common Mushroom"]
+            uncommon_m = users_mushroom[str(user.id)]["Uncommon Mushroom"]
+            rare_m = users_mushroom[str(user.id)]["Rare Mushroom"]
+            epic_m = users_mushroom[str(user.id)]["Epic Mushroom"]
+            legendary_m = users_mushroom[str(user.id)]["Legendary Mushroom"]
+            god_m = users_mushroom[str(user.id)]["God Mushroom"]
+            mushroom_chance = [common_m, uncommon_m, rare_m, epic_m, legendary_m, god_m]
+
+        with open("mushroom.json", "w") as f:
+            json.dump(users_mushroom, f)
+        return True
+
+
+    async def get_mushroom_data():
+        with open("mushroom.json", "r") as f:
+            users_mushroom = json.load(f)
+
+        return users_mushroom
 
 
 client.run("ODA0NDgyMzcwNDUwNjIwNDc3.YBM-lw.dUCuZ7Mb6mYCu2FXyjH3P013icE")
