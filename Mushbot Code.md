@@ -1,5 +1,5 @@
 # Projects-Freetime
-A showcase of projects i have created in my free time.
+# A showcase of projects i have created in my free time.
 
 import discord
 from discord import Embed, message
@@ -21,12 +21,9 @@ async def on_ready():
     print("Ready!")
 
 
-# type=<BucketType.default: 0>
-# rate = 1
-# per = 10
-
-# luck system
-
+type=<BucketType.default: 0>
+rate = 1
+per = 10
 
 # ?balance command for the balance interface
 @client.command(aliases=['inventory', 'bal', "balance", "money", "cash"])
@@ -75,7 +72,7 @@ async def convert(ctx, deposit="all"):
         await ctx.send(f"This has been cancelled")
 
 
-# search areas
+# search areas for mushrooms.
 @client.command(aliases=['loot'])
 @commands.cooldown(1, 20, BucketType.user)
 async def search(ctx):
@@ -244,6 +241,7 @@ async def search(ctx):
         await ctx.send("That's not an option")
 
 
+# Cooldown command
 @search.error
 async def search_error(ctx, error):
     if isinstance(error, commands.CommandOnCooldown):
