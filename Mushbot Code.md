@@ -492,5 +492,5 @@
         return users_mushroom
 
 
-client.run("ODA0NDgyMzcwNDUwNjIwNDc3.YBM-lw.dUCuZ7Mb6mYCu2FXyjH3P013icE")
+client.run(DISCORD_KEY)
 
